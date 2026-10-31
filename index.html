@@ -82,11 +82,11 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin />
     <link rel="dns-prefetch" href="https://artworks.thetvdb.com" />
     <link rel="preconnect" href="https://artworks.thetvdb.com" crossorigin />
-    <!-- Fonts (Google Fonts stack, matching Aniraku: Rubik body, Agbalumo brand, Orbitron display) -->
+    <!-- Fonts (Geist font family - variable font for body, Geist Mono for code) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Rubik:wght@400;500;600;700&family=Orbitron:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -143,11 +143,11 @@
       h.classList.add(t + "-mode");
       h.style.backgroundColor =
         {
-          dark: "#0b0b0f",
-          light: "#f5f5f5",
+          dark: "#010101",
+          light: "#ffffff",
           anilist: "#0b1622",
           catppuccin: "#1e1e2e",
-        }[t] || "#0b0b0f";
+        }[t] || "#010101";
       /* local-only: themes.css selects palettes via [data-theme] (live selects
          its palettes via the t-mode classes above) — same resolved value */
       h.setAttribute("data-theme", t);

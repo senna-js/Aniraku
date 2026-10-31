@@ -1,21 +1,10 @@
 /* ==========================================================================
  * GLOBAL CHROME parity rules — navbar search micro-parity, footer restructure,
  * DropSearch pikachu loader and the app-icon logo mask.
- *
- * src/styles/** is read-only for this mission, so the missing live rules live
- * here. This file is imported from App.tsx, i.e. AFTER the index.html-linked
- * globals.css, so equal-specificity overrides win.
+ * Updated for new design system per lokal.txt
  * ========================================================================== */
 
-/* --- live `.app-icon` (style.css, declarations verbatim) ------------------
- * Masks the element with the logo asset and tints it with the theme text
- * color. LOGO SWAP DONE (CSS side): the url() below is a RELATIVE bundled
- * import of the user's custom logo (source of truth =
- * src/assets/aniraku_logo.webp, also imported by BRAND_LOGO in
- * src/lib/brand.ts) so Vite rewrites it to the hashed asset URL at build
- * time — never hardcode a hashed /assets/*.png filename here (stale builds
- * 404). The portrait png carries true
- * alpha (rounded-square corners), so it masks cleanly and tints correctly. */
+/* --- App icon mask (ported from live) ------------------------------------ */
 .app-icon {
   background-color: var(--global-text);
   -webkit-mask-image: url('../assets/aniraku_logo.webp');
@@ -24,13 +13,11 @@
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
+  width: 32px;
+  height: 32px;
 }
 
-/* --- user's custom logo = SQUARE portrait (legacy logos were wide padded
- *      glyphs). globals.css sizes .navLogo/.sideMenuLogo img at width:7rem
- *      with the old width=112 height=28 hint →112×28 object-fit:fill box
- *      squashed the portrait. Force square boxes here (this file loads after
- *      globals.css). ------------------------------------------------------------ */
+/* --- Logo sizing (square portrait) --------------------------------------- */
 .navLogo img,
 .sideMenuLogo img {
   width: 32px;
@@ -38,28 +25,23 @@
   object-fit: contain;
 }
 
-/* --- navbar: in-box slash hint focus state (live `_slashToggleBtn` with
- *      data-focused=true brightens the hint) ------------------------------ */
+/* --- Navbar: in-box slash hint focus state -------------------------------- */
 .slashToggleBtn[data-focused='true'] {
   opacity: 1;
 }
 
-/* --- navbar: live hides the search action buttons (submit/random) at
- *      <=500px — the search box itself is already hidden by the existing
- *      .navSearchBar <=500px rule ---------------------------------------- */
+/* --- Navbar: hide search action buttons at <=500px ----------------------- */
 @media (max-width: 500px) {
   .searchSection .actionButtons {
     display: none;
   }
 }
 
-/* --- DropSearch pikachu loader (live `_loadingWrapper_9iqh4_34` /
- *      `_loadingImage_9iqh4_40`, declarations verbatim, readable local
- *      class names) -------------------------------------------------------- */
+/* --- DropSearch pikachu loader ------------------------------------------- */
 .searchLoadingWrapper {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  padding: var(--spacing-4);
 }
 
 .searchLoadingImage {
@@ -67,7 +49,7 @@
   max-width: 9rem;
 }
 
-/* --- footer wrapper (live `_pageWrapper_1yuuo_1`, verbatim) --------------- */
+/* --- Footer wrapper ------------------------------------------------------- */
 .footerPageWrapper {
   width: 100%;
 }
@@ -75,52 +57,57 @@
 @media (max-width: 1000px) {
   .footerPageWrapper {
     width: auto;
-    padding: 0 0.5rem;
+    padding: 0 var(--spacing-2);
   }
 }
 
 @media (max-width: 500px) {
   .footerPageWrapper[data-is-pwa='true'] {
-    padding-bottom: 1rem;
+    padding-bottom: var(--spacing-4);
   }
 }
 
-/* --- footer link lists (live `_linkList_1yuuo_41`, verbatim) -------------- */
+/* --- Footer link lists ---------------------------------------------------- */
 .footerLinkList {
   display: flex;
   flex-direction: column;
   margin: auto 0 0;
 }
 
-/* --- footer text variants (live `_text_1yuuo_87[data-issub]` + strong) ---- */
+/* --- Footer text variants ------------------------------------------------- */
 .footerText[data-issub='true'] {
-  padding: 1rem 0;
+  padding: var(--spacing-4) 0;
   line-height: 1.5rem;
 }
 
 .footerText[data-issub='false'] {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) 0;
 }
 
 .footerText strong {
   color: var(--global-text);
 }
 
-/* --- footer site link (live `_siteLink_1yuuo_111`, verbatim) -------------- */
+/* --- Footer site link ----------------------------------------------------- */
 .siteLink {
   color: var(--global-text-muted);
+  transition: color var(--duration-fast) var(--easing-exit);
 }
 
-/* --- social share links (live `_shareButton_1yuuo_142`, verbatim; the
- *      existing `.socialLinksContainer a` block carries the same base decls,
- *      underline-on-hover is the one delta) -------------------------------- */
+.siteLink:hover {
+  color: var(--primary-accent);
+}
+
+/* --- Social share links --------------------------------------------------- */
 .shareButton {
   display: flex;
   color: var(--global-text-muted);
-  transition: 0.2s ease-in-out;
+  transition:
+    color var(--duration-normal) var(--easing-standard),
+    transform var(--duration-normal) var(--easing-standard);
 }
 
 .shareButton svg {
@@ -128,29 +115,383 @@
 }
 
 .shareButton:hover {
-  color: var(--global-button-text);
+  color: var(--primary-accent);
   text-decoration: underline;
-  transform: scale(1.15);
+  transform: scale(var(--hover-scale));
 }
 
-/* --- footer legal links (user mandate: Privacy/Terms/DMCA/AGPL/
- *      Community Guidelines sit in the GLOBAL footer, bottom of every
- *      page — styles mirror the retired AuthLegalFooter strip) --------- */
+/* --- Footer legal links --------------------------------------------------- */
 .footerLegalNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px 12px;
+  gap: var(--spacing-2) var(--spacing-3);
   justify-content: center;
-  padding: 0.25rem 0;
-  font-size: 12px;
+  padding: var(--spacing-1) 0;
+  font-size: var(--font-size-xs);
 }
 
 .footerLegalNav a {
-  color: var(--global-text-muted-strong);
+  color: var(--global-text-muted);
   text-decoration: none;
+  transition: color var(--duration-fast) var(--easing-exit);
 }
 
 .footerLegalNav a:hover {
   color: var(--primary-accent);
   text-decoration: underline;
+}
+
+/* --- Updated navbar button styles for new design system ------------------- */
+.hamburger,
+.searchSubmitBtn,
+.randomBtn,
+.toggleSearchBtn,
+.notificationBtn,
+.profileBtn {
+  border-radius: var(--radius-button);
+  transition:
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit),
+    color var(--duration-fast) var(--easing-exit),
+    transform var(--duration-fast) var(--easing-exit);
+}
+
+.hamburger:active,
+.searchSubmitBtn:active,
+.randomBtn:active,
+.toggleSearchBtn:active,
+.notificationBtn:active,
+.profileBtn:active {
+  transform: scale(var(--active-scale));
+}
+
+/* --- Updated dropdown styles ---------------------------------------------- */
+.profileDropdown,
+.notificationDropdown {
+  border-radius: var(--radius-card);
+  box-shadow: var(--elevation-hover);
+  border-color: var(--global-border-color);
+  background-color: var(--global-div-tr);
+}
+
+.profileMenuItem {
+  border-radius: var(--radius-chip);
+  transition:
+    background-color var(--duration-fast) var(--easing-exit),
+    color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.profileMenuItem:hover {
+  background-color: var(--primary-accent-tr);
+  color: var(--primary-accent);
+  border-color: var(--global-border-color);
+}
+
+/* --- Updated side menu styles --------------------------------------------- */
+.sideMenu {
+  border-radius: 0;
+  box-shadow: var(--elevation-hover);
+}
+
+.navItem {
+  border-radius: var(--radius-chip);
+  transition:
+    background-color var(--duration-fast) var(--easing-exit),
+    color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.navItem:hover,
+.navItem:focus,
+.navItem.active {
+  background-color: var(--primary-accent-tr);
+  color: var(--primary-accent);
+  border-right-color: var(--primary-accent);
+}
+
+/* --- Updated footer theme buttons ----------------------------------------- */
+.footerThemeButtons {
+  border-radius: var(--radius-button);
+  border-color: var(--global-border-color);
+}
+
+.footerThemeBtn {
+  border-radius: var(--radius-chip);
+  transition:
+    background-color var(--duration-fast) var(--easing-exit),
+    color var(--duration-fast) var(--easing-exit);
+}
+
+.footerThemeBtn:hover {
+  background-color: var(--global-div);
+  color: var(--global-text);
+}
+
+/* --- Updated DropSearch styles -------------------------------------------- */
+.dropSearchContainer {
+  border-radius: var(--radius-card);
+  box-shadow: var(--elevation-hover);
+  border-color: var(--global-border-color);
+  background-color: var(--global-div);
+}
+
+.searchItem {
+  border-radius: var(--radius-chip);
+  transition:
+    padding var(--duration-normal) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.searchItem:hover,
+.searchItem:focus,
+.searchItem.selected {
+  background-color: var(--primary-accent-dk-tr);
+  border-color: var(--primary-accent);
+}
+
+.detail {
+  border-radius: var(--radius-chip);
+  transition:
+    color var(--duration-fast) var(--easing-exit),
+    background-color var(--duration-fast) var(--easing-exit);
+}
+
+.searchItem:hover .detail,
+.searchItem.selected .detail,
+.searchItem:focus .detail {
+  color: var(--primary-accent);
+  background-color: var(--global-div-tr);
+}
+
+/* --- Updated card styles -------------------------------------------------- */
+.cardItem {
+  border-radius: var(--radius-card);
+  transition:
+    transform var(--duration-normal) var(--easing-standard),
+    box-shadow var(--duration-normal) var(--easing-standard);
+}
+
+.cardImgContainer {
+  border-radius: var(--radius-card);
+  box-shadow: var(--elevation-subtle);
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    box-shadow var(--duration-normal) var(--easing-standard);
+}
+
+.cardImgContainer:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--elevation-hover);
+}
+
+.cardImg {
+  border-radius: var(--radius-card);
+  transition: filter var(--duration-fast) var(--easing-exit);
+}
+
+.cardImgContainer:hover .cardImg {
+  filter: brightness(0.6);
+}
+
+.playIcon {
+  transition:
+    opacity var(--duration-fast) var(--easing-exit),
+    transform var(--duration-fast) var(--easing-exit);
+}
+
+.cardImgContainer:hover .playIcon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.titleContainer {
+  border-radius: var(--radius-chip);
+  transition: background-color var(--duration-fast) var(--easing-exit);
+}
+
+.titleContainer:hover {
+  background-color: var(--global-card-title-bg);
+}
+
+.cardDetails {
+  border-radius: var(--radius-chip);
+}
+
+.cardDetail {
+  border-radius: var(--radius-chip);
+  transition: color var(--duration-fast) var(--easing-exit);
+}
+
+/* --- Updated status indicator --------------------------------------------- */
+.status-dot {
+  border-radius: 50%;
+}
+
+/* --- Updated shortcuts/settings popup ------------------------------------- */
+.shortcutsPopup {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.shortcutsContent {
+  border-radius: var(--radius-card);
+  border-color: var(--global-border-color);
+  background-color: var(--global-div-tr);
+  box-shadow: var(--elevation-hover);
+}
+
+.closeButton {
+  border-radius: var(--radius-chip);
+  transition:
+    color var(--duration-fast) var(--easing-exit),
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit),
+    transform var(--duration-fast) var(--easing-exit);
+}
+
+.closeButton:hover {
+  color: var(--primary-accent);
+  background-color: var(--primary-accent-tr);
+  border-color: var(--primary-accent);
+}
+
+.closeButton:active {
+  transform: scale(var(--active-scale));
+}
+
+.shortcutItem,
+.settingItem {
+  transition: background-color var(--duration-fast) var(--easing-exit);
+}
+
+.kbd {
+  border-radius: var(--radius-chip);
+  transition:
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.settingLink,
+.themeToggleBtn {
+  border-radius: var(--radius-button);
+  transition:
+    color var(--duration-fast) var(--easing-exit),
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit),
+    transform var(--duration-fast) var(--easing-exit);
+}
+
+.settingLink:hover,
+.themeToggleBtn:hover {
+  color: var(--primary-accent);
+  background-color: var(--primary-accent-tr);
+  border-color: var(--primary-accent);
+}
+
+.settingLink:active,
+.themeToggleBtn:active {
+  transform: scale(var(--active-scale));
+}
+
+/* --- Updated edit list styles --------------------------------------------- */
+.editListButton {
+  border-radius: var(--radius-chip);
+  transition:
+    transform var(--duration-fast) var(--easing-exit),
+    opacity var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.editListButton:hover {
+  border-color: var(--primary-accent);
+}
+
+.editListButton:active,
+.editListButton:focus {
+  transform: scale(var(--active-scale));
+}
+
+.editListDialog {
+  border-radius: var(--radius-card);
+  border-color: var(--global-border-color);
+  background-color: var(--global-div-tr);
+  box-shadow: var(--elevation-hover);
+}
+
+.editListLoginBtn {
+  border-radius: var(--radius-button);
+  transition:
+    color var(--duration-fast) var(--easing-exit),
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit);
+}
+
+.editListLoginBtn:hover {
+  color: var(--primary-accent);
+  background-color: var(--primary-accent-tr);
+  border-color: var(--primary-accent);
+}
+
+.editListLoginBtn:active {
+  transform: scale(0.98);
+}
+
+.editListSelect,
+.editListInput {
+  border-radius: var(--radius-button);
+  background-color: var(--global-div);
+  border-color: var(--global-border-color);
+}
+
+.editListTextArea {
+  border-radius: var(--radius-button);
+  background-color: var(--global-div);
+  border-color: var(--global-border-color);
+}
+
+.editListAction {
+  border-radius: var(--radius-button);
+  transition:
+    color var(--duration-fast) var(--easing-exit),
+    background-color var(--duration-fast) var(--easing-exit),
+    border-color var(--duration-fast) var(--easing-exit),
+    transform var(--duration-fast) var(--easing-exit);
+}
+
+.editListAction:hover {
+  color: var(--primary-accent);
+  background-color: var(--primary-accent-tr);
+  border-color: var(--primary-accent);
+}
+
+.editListAction:active {
+  transform: scale(var(--active-scale));
+}
+
+/* --- Card polish pass (from globals.css) --------------------------------- */
+.cardImg {
+  transition:
+    filter var(--duration-fast) var(--easing-exit),
+    transform var(--duration-slow) var(--easing-standard);
+}
+
+.cardImgContainer:hover .cardImg {
+  transform: scale(1.06);
+}
+
+@media (min-width: 501px) {
+  .cardItem:hover .cardImgContainer,
+  .cardItem:focus-within .cardImgContainer {
+    box-shadow:
+      0 10px 26px var(--global-shadow),
+      0 0 0 1px var(--primary-accent);
+    transform: translateY(-6px);
+  }
+}
+
+.cardDetails {
+  flex-wrap: wrap;
+  row-gap: var(--spacing-1);
 }

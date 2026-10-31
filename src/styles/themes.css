@@ -1,203 +1,353 @@
 /* ============================================================
-   Aniraku theme system — 1:1 with the live site (v1.14.x)
+   Aniraku theme system — redesigned per lokal.txt design language
    Five themes switched via [data-theme] on <html>:
      dark (default) | light | anilist | catppuccin
    "system" resolves to dark or light via prefers-color-scheme.
    A `dark-mode` class is kept on <html> for dark for compat.
+
+   Design tokens from lokal.txt:
+   - Colors: Primary #9E9EFF, Accent #B1B1FF, Surface #010101, Elevated #151515
+   - Text: #CDD6F4, Muted: #777C8E
+   - Gradient: #F1E4C9 → #FFFFFF
+   - Button: #282838 bg, #BAC2DE text
+   - Card: #181825 bg, 1px solid rgba(205,214,244,0.1)
+   - Input: #282838 bg
+   - Radius: 16px (1rem) for buttons, cards, chips
+   - Spacing: 4px grid (4, 8, 12, 16, 20)
+   - Elevation: rgba(17,17,27,0.6) 0px 0px 10px 0px
+   - Motion: 0.2s/0.1s, ease-in-out/ease-out
+   - Z-index: element: 10 → nav: 999999999
    ============================================================ */
 
 :root {
-  --app-font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif,
+  /* ============================================================
+     SHARED DESIGN TOKENS (apply to ALL themes)
+     ============================================================ */
+
+  /* Font family - Geist per design system */
+  --app-font-family: 'Geist', ui-sans-serif, system-ui, sans-serif,
     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 
-  /* z-index scale (the live site parity) */
+  /* Z-index scale (updated per design system) */
   --z-index-below: -1;
   --z-index-base: 0;
-  --z-index-above: 1;
-  --z-index-sticky: 10;
-  --z-index-content: 100;
-  --z-index-loading: 200;
-  --z-index-dropdown: 300;
-  --z-index-tooltip: 400;
-  --z-index-popover: 500;
-  --z-index-navbar: 600;
-  --z-index-mobile-menu: 700;
-  --z-index-modal-backdrop: 800;
+  --z-index-element: 10;
+  --z-index-sticky: 100;
+  --z-index-content: 200;
+  --z-index-loading: 300;
+  --z-index-dropdown: 400;
+  --z-index-tooltip: 500;
+  --z-index-popover: 600;
+  --z-index-navbar: 700;
+  --z-index-mobile-menu: 800;
+  --z-index-modal-backdrop: 900;
   --z-index-sidebar: 900;
   --z-index-modal: 1000;
   --z-index-popup: 1100;
-  --z-index-max: 9999;
+  --z-index-nav: 999999999;
+  --z-index-max: 999999999;
 
-  /* shared tokens (the live site parity) */
-  --global-border-radius: 0.5rem;
-  --primary-accent-bg: #595991;
-  --primary-accent-tr: rgba(128, 128, 207, 0.25);
-  --primary-accent-dk-tr: rgba(128, 128, 207, 0.1);
+  /* Shared tokens */
   --completed: #00aaff;
   --cancelled: #ff0000;
   --not-yet-aired: #ffa500;
   --favourite: #e85d8a;
   --favourite-bg: rgb(232 93 138 / 10%);
-  --global-shadow-light: rgba(0, 0, 0, 0.3);
+  --ongoing: #aaff00;
+  --ongoing-dot-color: #aaff00;
+  --completed-indicator-color: #00aaff;
+  --cancelled-indicator-color: #ff0000;
+  --not-yet-aired-indicator-color: #ffa500;
+  --default-indicator-color: #808080;
+  --opposite: #ffffff;
+
+  /* ============================================================
+     SPACING SCALE — 4px grid (4, 8, 12, 16, 20)
+     ============================================================ */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+
+  /* ============================================================
+     RADIUS SCALE — 16px (1rem) for buttons, cards, chips
+     ============================================================ */
+  --radius-chip: 1rem;
+  --radius-button: 1rem;
+  --radius-card: 1rem;
+  --global-border-radius: 1rem;
+
+  /* ============================================================
+     MOTION TOKENS
+     ============================================================ */
+  --duration-fast: 0.1s;
+  --duration-normal: 0.2s;
+  --duration-slow: 0.3s;
+  --easing-standard: ease-in-out;
+  --easing-exit: ease-out;
+  --easing-enter: ease-out;
+
+  /* ============================================================
+     ELEVATION / SHADOWS
+     ============================================================ */
+  --elevation-subtle: rgba(17, 17, 27, 0.6) 0px 0px 10px 0px;
+  --elevation-hover: rgba(0, 0, 0, 0.3) 0px 4px 8px;
+  --focus-ring: rgba(0, 0, 0, 0.4) 0px 0px 0px 2px;
+
+  /* ============================================================
+     INTERACTION STATES
+     ============================================================ */
+  --hover-scale: 1.15;
+  --active-scale: 0.9;
+  --hover-opacity: 1;
+
+  /* ============================================================
+     GRADIENT TOKENS (brand moments — hero text, CTAs, accents)
+     ============================================================ */
+  --gradient-brand: linear-gradient(135deg, #F1E4C9 0%, #FFFFFF 100%);
+  --gradient-accent: linear-gradient(135deg, #9E9EFF 0%, #B1B1FF 100%);
 }
 
-/* touch devices get a larger radius (the live site parity) */
+/* Touch devices get a larger radius (per design system parity) */
 @media (pointer: coarse) {
   :root {
     --global-border-radius: 1rem;
+    --radius-chip: 1rem;
+    --radius-button: 1rem;
+    --radius-card: 1rem;
   }
 }
 
-/* DARK (default) */
+/* ============================================================
+   DARK THEME (base — matches lokal.txt directly)
+   ============================================================ */
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --global-primary-bg: #080808;
-  --global-primary-bg-tr: rgba(8, 8, 8, 0.9);
-  --global-secondary-bg: #141414;
-  --global-tertiary-bg: #222222;
-  --global-div: #141414;
-  --global-div-tr: #0e0e0e;
-  --global-div-tr-2: rgba(14, 14, 14, 0.3);
-  --global-border-color: rgba(245, 245, 245, 0.1);
-  --global-text: #e8e8e8;
-  --global-text-muted: #696969;
-  --global-text-muted-strong: #a8a8a8;
-  --global-card-bg: #181818;
-  --global-card-title-bg: #151515;
-  --global-card-shadow: rgba(0, 0, 0, 0.6);
-  --global-primary-skeleton: rgba(85, 85, 85, 0.1);
-  --global-secondary-skeleton: rgba(85, 85, 85, 0.3);
-  --global-button-bg: #202020;
-  --global-button-bg-light: #222222;
-  --global-button-hover-bg: #292929;
-  --global-button-text: #ebebeb;
-  --global-button-shadow: rgba(0, 0, 0, 0.6);
-  --global-shadow: rgba(0, 0, 0, 0.6);
-  --global-border-radius: 0.5rem;
-  --primary-accent: #b5a8ff;
-  --primary-accent-bg: #595991;
-  --ongoing: #aaff00;
-  --ongoing-dot-color: #aaff00;
-  --completed-indicator-color: #00aaff;
-  --cancelled-indicator-color: #ff0000;
-  --not-yet-aired-indicator-color: #ffa500;
-  --default-indicator-color: #808080;
-  --opposite: #ffffff;
-  --meta-theme-color: #080808;
-}
 
-/* LIGHT */
-:root[data-theme='light'] {
-  color-scheme: light;
-  --global-primary-bg: #f5f5f5;
-  --global-primary-bg-tr: rgba(245, 245, 245, 0.8);
-  --global-secondary-bg: #e0e0e0;
-  --global-tertiary-bg: #dcdcdc;
-  --global-div: #e0e0e0;
-  --global-div-tr: #eaeaea;
-  --global-div-tr-2: rgba(234, 234, 234, 0.3);
-  --global-border-color: rgba(8, 8, 8, 0.1);
-  --global-text: #333;
-  --global-text-muted: #888;
-  --global-text-muted-strong: #5d5d5d;
-  --global-card-bg: #eee;
-  --global-card-title-bg: #e8e8e8;
-  --global-card-shadow: rgba(0, 0, 0, 0.3);
-  --global-primary-skeleton: rgba(165, 165, 165, 0.1);
-  --global-secondary-skeleton: rgba(165, 165, 165, 0.3);
-  --global-button-bg: #1a1919;
-  --global-button-bg-light: #d4d4d4;
-  --global-button-hover-bg: #cfcfcf;
-  --global-button-text: #333;
-  --global-button-shadow: rgba(255, 255, 255, 0.5);
-  --global-shadow: rgba(0, 0, 0, 0.3);
-  --global-shadow-light: rgba(0, 0, 0, 0.15);
-  --global-border-radius: 0.5rem;
-  --primary-accent: #b5a8ff;
-  --primary-accent-bg: #595991;
-  --ongoing: #4d8a00;
-  --ongoing-dot-color: #4d8a00;
-  --completed-indicator-color: #00aaff;
-  --cancelled-indicator-color: #ff0000;
-  --not-yet-aired-indicator-color: #ffa500;
-  --default-indicator-color: #808080;
-  --opposite: #000000;
-  --meta-theme-color: #f5f5f5;
-}
-
-/* ANILIST */
-:root[data-theme='anilist'] {
-  color-scheme: dark;
-  --global-primary-bg: rgb(11, 22, 34);
-  --global-primary-bg-tr: rgba(11, 22, 34, 0.9);
-  --global-secondary-bg: rgb(21, 31, 46);
-  --global-tertiary-bg: rgb(15, 22, 31);
-  --global-div: #151f2e;
-  --global-div-tr: #0f1928;
-  --global-div-tr-2: rgba(15, 25, 40, 0.3);
-  --global-border-color: rgba(159, 173, 189, 0.1);
-  --global-text: rgb(159, 173, 189);
-  --global-text-muted: rgb(114, 138, 161);
-  --global-text-muted-strong: rgb(137, 156, 175);
-  --global-card-bg: rgb(15, 22, 31);
-  --global-card-title-bg: rgb(6, 12, 19);
-  --global-card-shadow: rgba(0, 5, 15, 0.6);
-  --global-primary-skeleton: rgba(159, 173, 189, 0.1);
-  --global-secondary-skeleton: rgba(159, 173, 189, 0.3);
-  --global-button-bg: rgb(30, 42, 56);
-  --global-button-bg-light: rgb(6, 12, 19);
-  --global-button-hover-bg: rgb(21, 31, 46);
-  --global-button-text: rgb(159, 173, 189);
-  --global-button-shadow: rgba(0, 5, 15, 0.6);
-  --global-shadow: rgba(0, 5, 15, 0.6);
-  --global-border-radius: 0.5rem;
-  --primary-accent: #b5a8ff;
-  --primary-accent-bg: #595991;
-  --ongoing: #aaff00;
-  --ongoing-dot-color: #aaff00;
-  --completed-indicator-color: #00aaff;
-  --cancelled-indicator-color: #ff0000;
-  --not-yet-aired-indicator-color: #ffa500;
-  --default-indicator-color: #808080;
-  --opposite: #ffffff;
-  --meta-theme-color: #0b1622;
-}
-
-/* CATPPUCCIN */
-:root[data-theme='catppuccin'] {
-  color-scheme: dark;
-  --global-primary-bg: #1e1e2e;
-  --global-primary-bg-tr: rgba(30, 30, 46, 0.9);
-  --global-secondary-bg: #313244;
-  --global-tertiary-bg: #11111b;
-  --global-div: #282838;
-  --global-div-tr: #181825;
+  /* Core surfaces */
+  --global-primary-bg: #010101;        /* Surface */
+  --global-primary-bg-tr: rgba(1, 1, 1, 0.9);
+  --global-secondary-bg: #151515;       /* Elevated */
+  --global-tertiary-bg: #181825;        /* Card */
+  --global-div: #282838;                /* Button/Input bg */
+  --global-div-tr: #181825;             /* Card bg (transparent variant) */
   --global-div-tr-2: rgba(24, 24, 37, 0.3);
+
+  /* Borders */
   --global-border-color: rgba(205, 214, 244, 0.1);
-  --global-text: #cdd6f4;
-  --global-text-muted: #bac2de;
-  --global-text-muted-strong: rgb(196, 204, 233);
-  --global-card-bg: #313244;
-  --global-card-title-bg: #181825;
+
+  /* Text */
+  --global-text: #CDD6F4;               /* Primary text */
+  --global-text-muted: #777C8E;         /* Muted text */
+  --global-text-muted-strong: #BAC2DE;  /* Stronger muted */
+
+  /* Cards */
+  --global-card-bg: #181825;
+  --global-card-title-bg: #151515;
   --global-card-shadow: rgba(17, 17, 27, 0.6);
+
+  /* Skeletons */
   --global-primary-skeleton: rgba(205, 214, 244, 0.1);
   --global-secondary-skeleton: rgba(205, 214, 244, 0.3);
-  --global-button-bg: #181825;
-  --global-button-bg-light: #575268;
-  --global-button-hover-bg: #585b70;
-  --global-button-text: #cdd6f4;
-  --global-button-shadow: rgba(0, 0, 0, 0.6);
+
+  /* Buttons */
+  --global-button-bg: #282838;
+  --global-button-bg-light: #282838;
+  --global-button-hover-bg: #303040;
+  --global-button-text: #BAC2DE;
+  --global-button-shadow: rgba(17, 17, 27, 0.6);
+
+  /* Global shadow */
   --global-shadow: rgba(17, 17, 27, 0.6);
-  --global-border-radius: 0.5rem;
-  --primary-accent: #b5a8ff;
-  --primary-accent-bg: #595991;
+  --global-shadow-light: rgba(17, 17, 27, 0.3);
+
+  /* Accent colors */
+  --primary-accent: #9E9EFF;            /* Primary accent */
+  --primary-accent-bg: #282838;         /* Accent background */
+  --primary-accent-tr: rgba(158, 158, 255, 0.15);
+  --primary-accent-dk-tr: rgba(158, 158, 255, 0.08);
+  --primary-accent-hover: #B1B1FF;      /* Hover state */
+
+  /* Status indicators */
   --ongoing: #aaff00;
   --ongoing-dot-color: #aaff00;
-  --completed-indicator-color: #00aaff;
-  --cancelled-indicator-color: #ff0000;
-  --not-yet-aired-indicator-color: #ffa500;
-  --default-indicator-color: #808080;
-  --opposite: #ffffff;
-  --meta-theme-color: #1e1e2e;
+
+  /* Meta theme color for browser UI */
+  --meta-theme-color: #010101;
+}
+
+/* ============================================================
+   LIGHT THEME (adapted for light mode)
+   ============================================================ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Core surfaces - inverted for light mode */
+  --global-primary-bg: #FFFFFF;         /* Surface */
+  --global-primary-bg-tr: rgba(255, 255, 255, 0.9);
+  --global-secondary-bg: #F5F5F5;       /* Elevated */
+  --global-tertiary-bg: #FFFFFF;        /* Card */
+  --global-div: #EEEEEE;                /* Button/Input bg */
+  --global-div-tr: #FFFFFF;             /* Card bg */
+  --global-div-tr-2: rgba(255, 255, 255, 0.3);
+
+  /* Borders */
+  --global-border-color: rgba(26, 26, 46, 0.1);
+
+  /* Text */
+  --global-text: #1A1A2E;               /* Primary text (dark navy) */
+  --global-text-muted: #6B6B8A;         /* Muted text */
+  --global-text-muted-strong: #4A4A6A;  /* Stronger muted */
+
+  /* Cards */
+  --global-card-bg: #FFFFFF;
+  --global-card-title-bg: #F5F5F5;
+  --global-card-shadow: rgba(17, 17, 27, 0.15);
+
+  /* Skeletons */
+  --global-primary-skeleton: rgba(26, 26, 46, 0.1);
+  --global-secondary-skeleton: rgba(26, 26, 46, 0.3);
+
+  /* Buttons */
+  --global-button-bg: #EEEEEE;
+  --global-button-bg-light: #EEEEEE;
+  --global-button-hover-bg: #E0E0E0;
+  --global-button-text: #1A1A2E;
+  --global-button-shadow: rgba(17, 17, 27, 0.15);
+
+  /* Global shadow */
+  --global-shadow: rgba(17, 17, 27, 0.15);
+  --global-shadow-light: rgba(17, 17, 27, 0.08);
+
+  /* Accent colors - darker for contrast on light bg */
+  --primary-accent: #6E6EFF;            /* Primary accent (darker) */
+  --primary-accent-bg: #EEEEEE;
+  --primary-accent-tr: rgba(110, 110, 255, 0.15);
+  --primary-accent-dk-tr: rgba(110, 110, 255, 0.08);
+  --primary-accent-hover: #5A5AFF;      /* Hover state */
+
+  /* Status indicators */
+  --ongoing: #4D8A00;
+  --ongoing-dot-color: #4D8A00;
+
+  /* Meta theme color */
+  --meta-theme-color: #FFFFFF;
+}
+
+/* ============================================================
+   ANILIST THEME (adapted with AniList personality)
+   ============================================================ */
+:root[data-theme='anilist'] {
+  color-scheme: dark;
+
+  /* Core surfaces - AniList dark blues */
+  --global-primary-bg: #0B1622;         /* AniList base */
+  --global-primary-bg-tr: rgba(11, 22, 34, 0.9);
+  --global-secondary-bg: #151F2E;       /* Elevated */
+  --global-tertiary-bg: #0F1620;        /* Card */
+  --global-div: #151F2E;                /* Button/Input bg */
+  --global-div-tr: #0F1928;             /* Card bg */
+  --global-div-tr-2: rgba(15, 25, 40, 0.3);
+
+  /* Borders */
+  --global-border-color: rgba(159, 173, 189, 0.1);
+
+  /* Text */
+  --global-text: #9FADBD;               /* AniList text */
+  --global-text-muted: #728AA1;         /* Muted */
+  --global-text-muted-strong: #899CAF;  /* Stronger muted */
+
+  /* Cards */
+  --global-card-bg: #0F1620;
+  --global-card-title-bg: #060C13;
+  --global-card-shadow: rgba(0, 5, 15, 0.6);
+
+  /* Skeletons */
+  --global-primary-skeleton: rgba(159, 173, 189, 0.1);
+  --global-secondary-skeleton: rgba(159, 173, 189, 0.3);
+
+  /* Buttons */
+  --global-button-bg: #1E2A3C;
+  --global-button-bg-light: #060C13;
+  --global-button-hover-bg: #25344A;
+  --global-button-text: #9FADBD;
+  --global-button-shadow: rgba(0, 5, 15, 0.6);
+
+  /* Global shadow */
+  --global-shadow: rgba(0, 5, 15, 0.6);
+  --global-shadow-light: rgba(0, 5, 15, 0.3);
+
+  /* Accent colors - using new primary accent */
+  --primary-accent: #9E9EFF;            /* New primary accent */
+  --primary-accent-bg: #1E2A3C;
+  --primary-accent-tr: rgba(158, 158, 255, 0.15);
+  --primary-accent-dk-tr: rgba(158, 158, 255, 0.08);
+  --primary-accent-hover: #B1B1FF;
+
+  /* Status indicators */
+  --ongoing: #aaff00;
+  --ongoing-dot-color: #aaff00;
+
+  /* Meta theme color */
+  --meta-theme-color: #0B1622;
+}
+
+/* ============================================================
+   CATPPUCCIN THEME (adapted with Catppuccin Mocha personality)
+   ============================================================ */
+:root[data-theme='catppuccin'] {
+  color-scheme: dark;
+
+  /* Core surfaces - Catppuccin Mocha */
+  --global-primary-bg: #1E1E2E;         /* Mocha base */
+  --global-primary-bg-tr: rgba(30, 30, 46, 0.9);
+  --global-secondary-bg: #313244;       /* Elevated (Surface0) */
+  --global-tertiary-bg: #11111B;        /* Card (Crust) */
+  --global-div: #282838;                /* Button/Input bg (Surface1) */
+  --global-div-tr: #181825;             /* Card bg (Mantle) */
+  --global-div-tr-2: rgba(24, 24, 37, 0.3);
+
+  /* Borders */
+  --global-border-color: rgba(205, 214, 244, 0.1);
+
+  /* Text */
+  --global-text: #CDD6F4;               /* Text */
+  --global-text-muted: #BAC2DE;         /* Muted (Subtext1) */
+  --global-text-muted-strong: #A6ADC8;  /* Stronger muted (Subtext0) */
+
+  /* Cards */
+  --global-card-bg: #313244;            /* Surface0 */
+  --global-card-title-bg: #181825;      /* Mantle */
+  --global-card-shadow: rgba(17, 17, 27, 0.6);
+
+  /* Skeletons */
+  --global-primary-skeleton: rgba(205, 214, 244, 0.1);
+  --global-secondary-skeleton: rgba(205, 214, 244, 0.3);
+
+  /* Buttons */
+  --global-button-bg: #181825;          /* Mantle */
+  --global-button-bg-light: #575268;    /* Overlay0 */
+  --global-button-hover-bg: #585B70;    /* Overlay1 */
+  --global-button-text: #CDD6F4;        /* Text */
+  --global-button-shadow: rgba(0, 0, 0, 0.6);
+
+  /* Global shadow */
+  --global-shadow: rgba(17, 17, 27, 0.6);
+  --global-shadow-light: rgba(17, 17, 27, 0.3);
+
+  /* Accent colors - using new primary accent */
+  --primary-accent: #9E9EFF;            /* New primary accent (replaces Mauve) */
+  --primary-accent-bg: #282838;
+  --primary-accent-tr: rgba(158, 158, 255, 0.15);
+  --primary-accent-dk-tr: rgba(158, 158, 255, 0.08);
+  --primary-accent-hover: #B1B1FF;
+
+  /* Status indicators */
+  --ongoing: #A6E3A1;                   /* Green */
+  --ongoing-dot-color: #A6E3A1;
+
+  /* Meta theme color */
+  --meta-theme-color: #1E1E2E;
 }

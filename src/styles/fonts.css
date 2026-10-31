@@ -1,10 +1,28 @@
-/* Font tokens — Google Fonts stack loaded via <link> in index.html
-   (mirrors Aniraku: Rubik body, Agbalumo brand, Orbitron display).
+/* Font tokens — Geist font family (replaces Rubik/Agbalumo/Orbitron)
+   Loaded via Google Fonts in index.html
    Body text renders through var(--app-font-family) (themes.css).
-   Subtitle picker options are system fonts + bundled display faces
-   (Homemade Apple / Butterfly Kids, same as Aniraku's player). */
+   Display/heading weights available via --font-weight-* tokens. */
 :root {
-  --font-body: 'Rubik', ui-sans-serif, system-ui, sans-serif;
-  --font-brand: 'Agbalumo', cursive;
-  --font-display: 'Orbitron', 'Rajdhani', monospace;
+  --font-body: 'Geist', ui-sans-serif, system-ui, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Font weights matching the design system */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font sizes matching the type scale: 32px / 22px / 16px */
+  --font-size-xs: 11.2px;   /* H3 */
+  --font-size-sm: 12px;     /* Body */
+  --font-size-base: 14px;   /* Base UI */
+  --font-size-lg: 16px;     /* Large UI / Button */
+  --font-size-xl: 22px;     /* H2 */
+  --font-size-2xl: 32px;    /* H1 */
+
+  /* Line heights - tight (1.2) per design system */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
 }

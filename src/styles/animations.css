@@ -1,6 +1,6 @@
 /* ============================================================
-   Base animation system — the live site parity.
-   Keyframes + helper classes driven by --animation-* vars.
+   Base animation system — redesigned per lokal.txt design language
+   Motion tokens: 0.2s/0.1s durations, ease-in-out/ease-out easing
    ============================================================ */
 
 :root {
@@ -11,115 +11,116 @@
   --animation-fill-mode: none;
 }
 
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
 @keyframes grow {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
 }
 
 @keyframes grow10 {
-  0% {
-    transform: scale(0.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0.1); }
+  100% { transform: scale(1); }
 }
 
 @keyframes growY {
-  0% {
-    transform: scaleY(0);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+  0% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
 }
 
 @keyframes popIn0 {
-  0% {
-    opacity: 0;
-    scale: 0.95;
-  }
-  50% {
-    opacity: 1;
-    scale: 1;
-  }
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
+  0% { opacity: 0; scale: 0.95; }
+  50% { opacity: 1; scale: 1; }
+  100% { opacity: 1; scale: 1; }
 }
 
 @keyframes popIn50 {
-  0% {
-    opacity: 0;
-    scale: 0.95;
-  }
-  50% {
-    opacity: 1;
-    scale: 1;
-  }
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
+  0% { opacity: 0; scale: 0.95; }
+  50% { opacity: 1; scale: 1; }
+  100% { opacity: 1; scale: 1; }
 }
 
 @keyframes popIn98 {
-  0% {
-    opacity: 0;
-    scale: 0.98;
-  }
-  50% {
-    opacity: 1;
-    scale: 1;
-  }
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
+  0% { opacity: 0; scale: 0.98; }
+  50% { opacity: 1; scale: 1; }
+  100% { opacity: 1; scale: 1; }
 }
 
 @keyframes popInSk {
-  0%,
-  100% {
-    opacity: 0;
-    scale: 0.95;
-  }
-  50% {
-    opacity: 1;
-    scale: 1;
-  }
-  75% {
-    opacity: 0.5;
-    scale: 1;
-  }
+  0%, 100% { opacity: 0; scale: 0.95; }
+  50% { opacity: 1; scale: 1; }
+  75% { opacity: 0.5; scale: 1; }
 }
 
 @keyframes shrinkIn {
-  0% {
-    opacity: 1;
-    scale: 1;
-  }
-  100% {
-    opacity: 0;
-    scale: 0.95;
-  }
+  0% { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 0.95; }
 }
 
 @keyframes slideLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  0% { opacity: 0; transform: translateX(10px); }
+  100% { opacity: 1; transform: translateX(0); }
 }
+
+@keyframes slideRight {
+  0% { opacity: 0; transform: translateX(-10px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dropDown {
+  0% { max-height: 0; }
+  100% { max-height: 500px; }
+}
+
+@keyframes slideDropDown {
+  0% { opacity: 0; transform: translateY(-20px); max-height: 0; }
+  100% { opacity: 1; transform: translateY(0); max-height: 500px; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   HOVER/INTERACTION ANIMATIONS (per design system)
+   ============================================================ */
+
+@keyframes hoverLift {
+  0% { transform: translateY(0) scale(1); box-shadow: var(--elevation-subtle); }
+  100% { transform: translateY(-4px) scale(var(--hover-scale)); box-shadow: var(--elevation-hover); }
+}
+
+@keyframes activePress {
+  0% { transform: scale(1); }
+  100% { transform: scale(var(--active-scale)); }
+}
+
+@keyframes focusRing {
+  0% { box-shadow: var(--elevation-subtle); }
+  100% { box-shadow: var(--elevation-subtle), var(--focus-ring); }
+}
+
+/* ============================================================
+   HELPER CLASSES (driven by --animation-* vars)
+   ============================================================ */
 
 .animFadeIn {
   animation: fadeIn var(--animation-duration) var(--animation-timing)
@@ -151,8 +152,8 @@
     var(--animation-fill-mode);
 }
 
-.animSlideRight {
-  animation: slideRight var(--animation-duration) var(--animation-timing)
+.animSlideDown {
+  animation: slideDown var(--animation-duration) var(--animation-timing)
     var(--animation-delay) var(--animation-iteration-count)
     var(--animation-fill-mode);
 }
@@ -163,79 +164,49 @@
     var(--animation-fill-mode);
 }
 
-/* ---- local keyframes (kept) ---- */
-
-@keyframes slideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.animSlideRight {
+  animation: slideRight var(--animation-duration) var(--animation-timing)
+    var(--animation-delay) var(--animation-iteration-count)
+    var(--animation-fill-mode);
 }
 
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ============================================================
+   INTERACTION STATE CLASSES
+   ============================================================ */
+
+/* Hover: scale(1.15), shadow, opacity 1 */
+.interactive:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: var(--elevation-hover);
+  opacity: var(--hover-opacity);
+  transition: transform var(--duration-normal) var(--easing-standard),
+              box-shadow var(--duration-normal) var(--easing-standard),
+              opacity var(--duration-fast) var(--easing-exit);
 }
 
-@keyframes slideRight {
-  0% {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Active: scale(0.9) */
+.interactive:active {
+  transform: scale(var(--active-scale));
+  transition: transform var(--duration-fast) var(--easing-exit);
 }
 
-@keyframes dropDown {
-  0% {
-    max-height: 0;
-  }
-  100% {
-    max-height: 500px;
-  }
+/* Focus: medium ring, shadow */
+.interactive:focus-visible {
+  outline: none;
+  box-shadow: var(--elevation-subtle), var(--focus-ring);
+  transition: box-shadow var(--duration-fast) var(--easing-exit);
 }
 
-@keyframes slideDropDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-    max-height: 0;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 500px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
