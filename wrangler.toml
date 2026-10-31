@@ -1,0 +1,11 @@
+name = "aniraku"
+compatibility_date = "2024-10-31"
+pages_build_output_dir = "dist"
+
+[env.production]
+# Production environment variables (set via Cloudflare Dashboard > Pages > Settings > Environment variables)
+# VITE_API_URL = "https://api.aniraku.tech"
+
+[[env.production.vars]]
+# These will be overridden by dashboard settings
+VITE_APP_NAME = "Aniraku"
